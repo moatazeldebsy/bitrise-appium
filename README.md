@@ -1,4 +1,4 @@
-### A Demo project for running [Appium](https://appium.io/) with Espresso Driver and [Bitrise CI/CD](https://www.bitrise.io/). 
+### A Demo project for running [Appium](https://appium.io/) with [Espresso Driver](https://github.com/appium/appium-espresso-driver) and [Bitrise CI/CD](https://www.bitrise.io/). 
 
 <img src="/dc.png" />
 
