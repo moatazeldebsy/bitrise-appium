@@ -1,6 +1,6 @@
 ### A Demo project for running [Appium](https://appium.io/) with Espresso Driver and [Bitrise CI/CD](https://www.bitrise.io/). 
 
-
+<img src="/dc.png" />
 
 In this Demo I'm using the  **Ubuntu-Android** Stack
 
