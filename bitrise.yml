@@ -1,0 +1,51 @@
+---
+format_version: '8'
+default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
+project_type: other
+trigger_map:
+- push_branch: '*'
+  workflow: primary
+- pull_request_source_branch: '*'
+  workflow: primary
+workflows:
+  primary:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6.0: {}
+    - avd-manager@1:
+        inputs:
+        - api_level: '29'
+    - wait-for-android-emulator@1: {}
+    - script@1:
+        title: Install and Run Appium
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            #export JAVA_HOME
+            export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+            export PATH=$PATH:$JAVA_HOME/bin
+
+            npm install -g appium --unsafe-perm=true --allow-root
+
+            appium &>/dev/null &
+    - script@1:
+        title: Run UI Tests
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+            mvn clean test -Pandroid
+    - custom-test-results-export@0:
+        inputs:
+        - search_pattern: '*/target/surefire-reports/junitreports/*'
+        - test_name: AppiumDemo
+    - deploy-to-bitrise-io@1: {}
