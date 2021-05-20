@@ -4,7 +4,6 @@
     <test name="Android">
         <classes>
              <class name="tests.AppiumDemo"/>
-             <class name="tests.AppiumDemo2"/>
         </classes>
     </test>
 </suite>
