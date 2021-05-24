@@ -1,11 +1,11 @@
 ---
 format_version: '8'
-default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: other
 trigger_map:
-- push_branch: '*'
+- push_branch: "*"
   workflow: primary
-- pull_request_source_branch: '*'
+- pull_request_source_branch: "*"
   workflow: primary
 workflows:
   primary:
@@ -33,7 +33,7 @@ workflows:
 
             npm install -g appium --unsafe-perm=true --allow-root
 
-            appium &>/dev/null &
+            appium --log appium.log &>/dev/null &
     - script@1:
         title: Run UI Tests
         inputs:
@@ -44,8 +44,20 @@ workflows:
             # debug log
             set -x
             mvn clean test -Pandroid
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # write your script here
+            cp ./appium.log $BITRISE_DEPLOY_DIR
+        title: Export Appium Logs
     - custom-test-results-export@0:
         inputs:
-        - search_pattern: '*/target/surefire-reports/junitreports/*'
+        - search_pattern: "*/target/surefire-reports/junitreports/*"
         - test_name: AppiumDemo
     - deploy-to-bitrise-io@1: {}
