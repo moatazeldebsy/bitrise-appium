@@ -26,7 +26,7 @@ public class AppiumDemo {
         capabilities.setCapability("showGradleLog",true);
         capabilities.setCapability("app",
                 System.getProperty("user.dir") + "/apps/Calculator.apk");
-        driver = new AndroidDriver(new URL("http://localhost:4724/wd/hub"), capabilities);
+        driver = new AndroidDriver(new URL("https://api.kobiton.com/wd/hub"), capabilities);
     }
 
     @Test
