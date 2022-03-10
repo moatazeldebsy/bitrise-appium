@@ -15,18 +15,23 @@ import java.net.URL;
 
 public class AppiumDemo {
     public static AppiumDriver driver;
-
+    
     @BeforeClass
     public void Android_setUp() throws MalformedURLException {
         DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setCapability("sessionName", "Bitrise automation test session");
+        capabilities.setCapability("sessionDescription", "");
+        capabilities.setCapability("deviceOrientation", "portrait");
+        capabilities.setCapability("deviceGroup", "KOBITON");
+        capabilities.setCapability("captureScreenshots", true);
         capabilities.setCapability("automationName", "espresso");
-        capabilities.setCapability("platformVersion", "11.0");
-        capabilities.setCapability("deviceName", "Android Emulator");
+        capabilities.setCapability("platformVersion", "11");
+        capabilities.setCapability("deviceName", "Galaxy Note20 5G");
         capabilities.setCapability("platformName", "Android");
         capabilities.setCapability("showGradleLog",true);
         capabilities.setCapability("app",
-                System.getProperty("user.dir") + "/apps/Calculator.apk");
-        driver = new AndroidDriver(new URL("https://api.kobiton.com/wd/hub"), capabilities);
+                System.getProperty("user.dir") + "kobiton-store:v351498");
+        driver = new AndroidDriver(new URL("$kobitonServerUrl"), capabilities);
     }
 
     @Test
