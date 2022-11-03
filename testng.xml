@@ -3,8 +3,8 @@
 <suite name="Suite" parallel="tests">
     <test name="Android">
         <classes>
-             <class name="tests.AppiumDemo"/>
-             <class name="tests.AppiumDemo2"/>
+             <class name="tests.AppiumAndroidTest"/>
+            <class name="tests.AppiumIOSTest" />
         </classes>
     </test>
 </suite>
