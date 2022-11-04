@@ -24,7 +24,7 @@ public class AppiumIOSTest {
         driver = new IOSDriver(new URL("http://127.0.0.1:4723"), capabilities);
     }
     @Test
-    public void calcDemo(){
+    public void todoDemo(){
         driver.findElement(By.id("plus.circle")).click();
     }
 
