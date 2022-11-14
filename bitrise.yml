@@ -1,0 +1,55 @@
+---
+format_version: '11'
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+project_type: other
+workflows:
+  primary:
+    steps:
+    - activate-ssh-key@4.1:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6.2: {}
+    - avd-manager@1:
+        inputs:
+        - api_level: '28'
+    - git::https://github.com/moatazeldebsy/bitrise-step-appium-server.git@main:
+        title: Install Appium Server
+    - script@1.2:
+        title: Run UI Tests
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # write your script here
+
+             mvn clean test
+    - script@1.2:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+            # write your script here
+            cp ./appium.log $BITRISE_DEPLOY_DIR
+        title: Export Appium Logs
+        is_always_run: true
+    - custom-test-results-export@0.1:
+        inputs:
+        - search_pattern: "*.xml"
+        - base_path: "./target/surefire-reports/"
+        - test_name: AppiumDemo
+    - deploy-to-bitrise-io@2.1: {}
+meta:
+  bitrise.io:
+    stack: osx-xcode-14.1.x
+    machine_type_id: g2.8core
+trigger_map:
+- pull_request_source_branch: "*"
+  workflow: primary
